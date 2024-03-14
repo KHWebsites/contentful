@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://themobilecompany.com/sitemap.xml
