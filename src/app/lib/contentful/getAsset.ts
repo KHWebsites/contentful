@@ -3,7 +3,7 @@ import { apolloFetcher } from '../apollo/apollo-fetcher';
 
 enum EContentType {
     'image/png',
-    'image/jpeg'
+    'image/jpeg',
 }
 
 type TAsset = {
@@ -36,6 +36,6 @@ const GET_ASSET = gql`
     }
 `;
 
-export const getAsset = ({id}: {id: string}) => {
+export const getAsset = ({ id }: { id: string }) => {
     return apolloFetcher<TAssetCollection>(GET_ASSET, { id });
-}
+};

@@ -106,13 +106,17 @@ export const GET_LANDING_PAGE_BY_ID = gql`
     }
 `;
 
-export const getLandingPageByInternalName = async ({internalName}: {internalName: string}) => {
-    return apolloFetcher<TLandingPageCollection>(GET_LANDING_PAGE_BY_INTERNALNAME, { internalName });
-}
+export const getLandingPageByInternalName = async ({
+    internalName,
+}: {
+    internalName: string;
+}) => {
+    return apolloFetcher<TLandingPageCollection>(
+        GET_LANDING_PAGE_BY_INTERNALNAME,
+        { internalName }
+    );
+};
 
-export const getLandingPageById = async ({id}: {id: string}) => {
+export const getLandingPageById = async ({ id }: { id: string }) => {
     return apolloFetcher<TLandingPage>(GET_LANDING_PAGE_BY_ID, { id });
-}
-
-
-
+};

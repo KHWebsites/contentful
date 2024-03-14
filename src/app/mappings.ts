@@ -1,13 +1,22 @@
+import { ComponentType } from 'react';
 import dynamic from 'next/dynamic';
 
-export type ComponentMap = {
-    [key: string]: React.ComponentType<any>;
+type TComponentMap = {
+    [key: string]: ComponentType<any>;
 };
 
-export const componentMap: ComponentMap = {
+export const ctfComponentMap: TComponentMap = {
+} as const;
+
+export const componentMap: TComponentMap = {
     HeroComponent: dynamic(() =>
         import('@/components/contentful/HeroComponent').then(
             (mod) => mod.HeroComponent
+        )
+    ),
+    NewsletterComponent: dynamic(() =>
+        import('@/components/contentful/NewsletterComponent').then(
+            (mod) => mod.NewsletterComponent
         )
     ),
     RichTextComponent: dynamic(() =>

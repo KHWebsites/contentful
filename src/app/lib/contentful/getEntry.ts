@@ -15,17 +15,17 @@ type _TEntryCollection = {
 };
 
 const GET_ENTRY = gql`
-query ($id: String!) {
-    entryCollection(where: {sys: {id: $id}}) {
-      items {
-        sys {
-          id
+    query ($id: String!) {
+        entryCollection(where: { sys: { id: $id } }) {
+            items {
+                sys {
+                    id
+                }
+            }
         }
-      }
     }
-  }
 `;
 
-export const getEntry = async ({id}: {id: string}) => {
+export const getEntry = async ({ id }: { id: string }) => {
     return apolloFetcher<_TEntryCollection>(GET_ENTRY, { id });
-}
+};

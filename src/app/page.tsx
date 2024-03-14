@@ -6,7 +6,9 @@ import { PageContent } from '@/components/contentful/PageContent';
 const internalPageName = 'page - Homepage';
 
 export default async function Home() {
-    const { data } = await getLandingPageByInternalName({ internalName: internalPageName });
+    const { data } = await getLandingPageByInternalName({
+        internalName: internalPageName,
+    });
     const pageContent =
         data.landingPageCollection!.items[0].pageContentCollection.items;
 
@@ -18,7 +20,9 @@ export default async function Home() {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-    const { data } = await getLandingPageByInternalName({ internalName: internalPageName });
+    const { data } = await getLandingPageByInternalName({
+        internalName: internalPageName,
+    });
     const seoMetadata = data.landingPageCollection.items[0].seoMetadata;
 
     return {

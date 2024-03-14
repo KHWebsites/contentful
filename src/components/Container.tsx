@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import Image from "next/image";
+import Image from 'next/image';
 
 type _TProps = {
     children: React.ReactNode;
@@ -20,11 +20,12 @@ export const Container = ({
     backgroundImage,
     backgroundImageFull = true,
     isFirst,
-    maxWidth,
+    maxWidth = true,
     ariaLabel,
     className,
 }: _TProps) => {
-    const hasFullBackgroundImageWithFullContent = maxWidth && backgroundImage && !backgroundImageFull;
+    const hasFullBackgroundImageWithFullContent =
+        maxWidth && backgroundImage && !backgroundImageFull;
     return (
         <section
             aria-label={ariaLabel}
@@ -32,23 +33,23 @@ export const Container = ({
         >
             {backgroundImage && (
                 <>
-                <Image
-                    className="w-full h-full object-cover object-center absolute top-0 left-0 z-0"
-                    width={1920}
-                    height={1080}
-                    src={backgroundImage.url}
-                    alt={backgroundImage.title}
-                    priority={true}
-                />
-                <div className={`relative z-10 w-full h-full ${!hasFullBackgroundImageWithFullContent ? 'container mx-auto' : ''}`}>
-                    {children}
-                </div>
+                    <Image
+                        className='absolute left-0 top-0 z-0 h-full w-full object-cover object-center'
+                        width={1920}
+                        height={1080}
+                        src={backgroundImage.url}
+                        alt={backgroundImage.title}
+                        priority={true}
+                    />
+                    <div
+                        className={`relative z-10 h-full w-full ${!hasFullBackgroundImageWithFullContent ? 'container mx-auto' : ''}`}
+                    >
+                        {children}
+                    </div>
                 </>
             )}
 
-            {!backgroundImage && (
-                children
-            )}   
+            {!backgroundImage && children}
         </section>
     );
 };

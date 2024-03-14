@@ -1,6 +1,12 @@
 import { BLOCKS } from '@contentful/rich-text-types';
 
-export const Typography = ({children, variant}: {children: any, variant: BLOCKS}): JSX.Element => {
+export const Typography = ({
+    children,
+    variant,
+}: {
+    children: any;
+    variant: BLOCKS;
+}): JSX.Element => {
     switch (variant) {
         case BLOCKS.PARAGRAPH:
             return <p>{children}</p>;
@@ -19,4 +25,4 @@ export const Typography = ({children, variant}: {children: any, variant: BLOCKS}
         default:
             return <p>{children}</p>;
     }
-}
+};

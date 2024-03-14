@@ -1,5 +1,5 @@
 import { Inter } from 'next/font/google';
-import { Nav } from '@/components/Nav';
+import { Nav } from '@/components/contentful/Nav';
 import { ReactElement } from 'react';
 import './globals.css';
 

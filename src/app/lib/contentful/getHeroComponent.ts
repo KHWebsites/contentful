@@ -9,21 +9,21 @@ type THeroComponentCollection = {
             json: Document;
             links?: {
                 entries?: {
-                  block?: any;
-                  inline?: any;
+                    block?: any;
+                    inline?: any;
                 } | null;
                 assets?: {
-                  block?: any;
+                    block?: any;
                 } | null;
-             } | null;
+            } | null;
         };
         ctaText: string;
         ctAtargetPage: {
-            pageName: string;
+            slug: string;
         };
         secondaryCtaText: string;
         secondaryCtaTargetPage: {
-            pageName: string;
+            slug: string;
         };
         backgroundImage: {
             title: string;
@@ -57,19 +57,26 @@ const GET_HERO_COMPONENT = gql`
                         block {
                             sys {
                                 id
-                            }
+                              }
+                              title
+                              description
+                              contentType
+                              fileName
+                              size
+                              url
+                              width
+                              height
                         }
                     }
-                
                 }
             }
             ctaText
             ctAtargetPage {
-                pageName
+                slug
             }
             secondaryCtaText
             secondaryCtaTargetPage {
-                pageName
+                slug
             }
             backgroundImage {
                 title
