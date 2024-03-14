@@ -1,14 +1,21 @@
-import { ApolloQueryResult, gql } from '@apollo/client';
-import { getClient } from '@/app/lib/apollo/apollo-client';
+import { gql } from '@apollo/client';
 import { Document } from '@contentful/rich-text-types';
+import { apolloFetcher } from '../apollo/apollo-fetcher';
 
-const apolloClient = getClient();
-
-type heroComponentCollection = {
+type THeroComponentCollection = {
     heroComponent: {
         headline: string;
         bodyText: {
             json: Document;
+            links?: {
+                entries?: {
+                  block?: any;
+                  inline?: any;
+                } | null;
+                assets?: {
+                  block?: any;
+                } | null;
+             } | null;
         };
         ctaText: string;
         ctAtargetPage: {
@@ -33,6 +40,28 @@ const GET_HERO_COMPONENT = gql`
             headline
             bodyText {
                 json
+                links {
+                    entries {
+                        block {
+                            sys {
+                                id
+                            }
+                        }
+                        inline {
+                            sys {
+                                id
+                            }
+                        }
+                    }
+                    assets {
+                        block {
+                            sys {
+                                id
+                            }
+                        }
+                    }
+                
+                }
             }
             ctaText
             ctAtargetPage {
@@ -52,13 +81,6 @@ const GET_HERO_COMPONENT = gql`
     }
 `;
 
-export const getHeroComponent = async ({
-    id,
-}: {
-    id: string;
-}): Promise<ApolloQueryResult<heroComponentCollection>> => {
-    return await apolloClient.query<heroComponentCollection>({
-        query: GET_HERO_COMPONENT,
-        variables: { id },
-    });
+export const getHeroComponent = async ({ id }: { id: string }) => {
+    return apolloFetcher<THeroComponentCollection>(GET_HERO_COMPONENT, { id });
 };

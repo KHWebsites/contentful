@@ -10,4 +10,14 @@ export const componentMap: ComponentMap = {
             (mod) => mod.HeroComponent
         )
     ),
+    RichTextComponent: dynamic(() =>
+        import('@/components/contentful/RichTextComponent').then(
+            (mod) => mod.RichTextComponent
+        )
+    ),
+    HyperlinkComponent: dynamic(() =>
+        import('@/components/contentful/HyperlinkComponent').then(
+            (mod) => mod.HyperlinkComponent
+        )
+    ),
 } as const;

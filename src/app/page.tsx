@@ -1,12 +1,14 @@
 import type { Metadata } from 'next';
-import { getLandingPage } from '@/app/lib/contentful/getLandingpage';
+import { getLandingPageByInternalName } from '@/app/lib/contentful/getLandingpage';
 import { PageContainer } from '@/components/PageContainer';
 import { PageContent } from '@/components/contentful/PageContent';
 
+const internalPageName = 'page - Homepage';
+
 export default async function Home() {
-    const { data } = await getLandingPage();
+    const { data } = await getLandingPageByInternalName({ internalName: internalPageName });
     const pageContent =
-        data.landingPageCollection.items[0].pageContentCollection.items;
+        data.landingPageCollection!.items[0].pageContentCollection.items;
 
     return (
         <PageContainer>
@@ -16,7 +18,7 @@ export default async function Home() {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-    const { data } = await getLandingPage();
+    const { data } = await getLandingPageByInternalName({ internalName: internalPageName });
     const seoMetadata = data.landingPageCollection.items[0].seoMetadata;
 
     return {

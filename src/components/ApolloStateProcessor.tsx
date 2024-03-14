@@ -1,7 +1,7 @@
 import { ApolloError } from "@apollo/client";
 import { ReactElement } from "react"
 import { Container } from "./Container";
-import { ComponentSkeleton } from "./contentful/ComponentSkeleton";
+import { ComponentSkeleton } from "./ComponentSkeleton";
 
 type _TApolloStateProcessor = {
     children: ReactElement;

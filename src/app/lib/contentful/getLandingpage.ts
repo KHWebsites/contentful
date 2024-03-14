@@ -1,14 +1,12 @@
 import gql from 'graphql-tag';
-import { getClient } from '@/app/lib/apollo/apollo-client';
-import { ApolloQueryResult } from '@apollo/client';
+import { apolloFetcher } from '../apollo/apollo-fetcher';
 
-const apolloClient = getClient();
-
-export type landingPageCollection = Readonly<{
+export type TLandingPageCollection = Readonly<{
     landingPageCollection: {
         __typename: string;
         items: {
             pageName: string;
+            slug: string;
             pageContentCollection: {
                 items: {
                     __typename: string;
@@ -30,11 +28,36 @@ export type landingPageCollection = Readonly<{
     };
 }>;
 
-export const GET_LANDING_PAGE = gql`
+export type TLandingPage = Readonly<{
+    landingPage: {
+        pageName: string;
+        slug: string;
+        pageContentCollection: {
+            items: {
+                __typename: string;
+                sys: {
+                    id: string;
+                };
+            }[];
+        };
+        seoMetadata: {
+            seoTitle: string;
+            description: string;
+            image: {
+                url: string;
+            };
+            noIndex: boolean;
+            noFollow: boolean;
+        };
+    };
+}>;
+
+export const GET_LANDING_PAGE_BY_INTERNALNAME = gql`
     query ($internalName: String!) {
         landingPageCollection(where: { internalName: $internalName }) {
             items {
                 pageName
+                slug
                 pageContentCollection(limit: 20) {
                     items {
                         __typename
@@ -57,11 +80,39 @@ export const GET_LANDING_PAGE = gql`
     }
 `;
 
-export const getLandingPage = async (): Promise<
-    ApolloQueryResult<landingPageCollection>
-> => {
-    return await apolloClient.query<landingPageCollection>({
-        query: GET_LANDING_PAGE,
-        variables: { internalName: 'page - Homepage' },
-    });
-};
+export const GET_LANDING_PAGE_BY_ID = gql`
+    query ($id: String!) {
+        landingPage(id: $id) {
+            pageName
+            slug
+            pageContentCollection(limit: 20) {
+                items {
+                    __typename
+                    sys {
+                        id
+                    }
+                }
+            }
+            seoMetadata {
+                seoTitle
+                description
+                image {
+                    url
+                }
+                noIndex
+                noFollow
+            }
+        }
+    }
+`;
+
+export const getLandingPageByInternalName = async ({internalName}: {internalName: string}) => {
+    return apolloFetcher<TLandingPageCollection>(GET_LANDING_PAGE_BY_INTERNALNAME, { internalName });
+}
+
+export const getLandingPageById = async ({id}: {id: string}) => {
+    return apolloFetcher<TLandingPage>(GET_LANDING_PAGE_BY_ID, { id });
+}
+
+
+

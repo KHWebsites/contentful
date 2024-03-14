@@ -1,17 +1,32 @@
 import { Options, documentToReactComponents } from '@contentful/rich-text-react-renderer';
-import { Document, BLOCKS, Block, Inline, INLINES, MARKS} from '@contentful/rich-text-types';
+import { Document, BLOCKS, Block, Inline, INLINES} from '@contentful/rich-text-types';
 import { Typography } from '../Typography';
 import { ReactNode, useMemo } from 'react';
-
+import { componentMap } from '@/app/mappings';
+import { headers } from 'next/headers';
 
 type _TProps = {
-    richText: Document
+    richText:  {
+        json: Document;
+        links?: {
+            entries?: {
+                block?: any;
+                inline?: any;
+            } | null;
+            assets?: {
+                block?: any;
+                } | null;
+        } | null;
+    };
+    
 }
 
 export const RichTextComponent = ({richText}: _TProps): JSX.Element => {
-    const document: Document = richText;
+    const document: Document = richText.json;
+    const HyperlinkComponent = componentMap.HyperlinkComponent;
 
     const options: Options = useMemo(() => {
+        const headersList = headers();
         let opts: Options = {
             renderNode: {},
             renderText: text => text,
@@ -24,7 +39,6 @@ export const RichTextComponent = ({richText}: _TProps): JSX.Element => {
         }
 
         const paragraphRenderer = ({ variant }: TParagraphRendererProps) => (_node: Block | Inline, children: ReactNode) => {
-            console.log(_node)
             return <Typography variant={variant}>{children}</Typography>;
         }
 
@@ -65,12 +79,28 @@ export const RichTextComponent = ({richText}: _TProps): JSX.Element => {
 
         // INLINE HYPERLINK
         const hyperlinkRenderer = (_node: Block | Inline, children: ReactNode) => {
-            return <a className='underline' href={
+            // Check if link is external link
+            const isTargetBlank = (_node as Inline).data.uri && new URL((_node as Inline).data.uri).host !== headersList.get('host');
+
+            return <a className='underline' target={isTargetBlank ? '_blank' : ''} href={
                 (_node as Inline).data.uri
             }>{children}</a>;
         }
 
         opts.renderNode![INLINES.HYPERLINK] = hyperlinkRenderer;
+
+        // ASSETS HYPERLINK
+        const inlineHyperlinkRenderer = (_node: Block | Inline, children: ReactNode) => {
+            return <HyperlinkComponent id={(_node as Inline).data.target.sys.id} nodeType={_node.nodeType}>{children}</HyperlinkComponent>;
+        }
+
+        opts.renderNode![INLINES.ASSET_HYPERLINK] = inlineHyperlinkRenderer;
+
+        // ENTRY HYPERLINK
+        opts.renderNode![INLINES.ENTRY_HYPERLINK] = inlineHyperlinkRenderer;
+
+        // RESOURCE HYPERLINK
+        opts.renderNode![INLINES.RESOURCE_HYPERLINK] = inlineHyperlinkRenderer;
 
         // RenderText
         opts.renderText = text => {
