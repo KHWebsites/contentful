@@ -1,7 +1,7 @@
-export const NewsletterComponent = ({id}: {id: string}) => {
+export const NewsletterComponent = ({ id }: { id: string }) => {
     return (
         <div>
-            <h1>Newsletter</h1>
+            <h1>Newsletter {id}</h1>
         </div>
     );
-}
+};

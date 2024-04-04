@@ -35,8 +35,8 @@ type THeroComponentCollection = {
 };
 
 const GET_HERO_COMPONENT = gql`
-    query ($id: String!) {
-        heroComponent(id: $id) {
+    query ($id: String!, $locale: String!) {
+        heroComponent(id: $id, locale: $locale) {
             headline
             bodyText {
                 json
@@ -57,15 +57,15 @@ const GET_HERO_COMPONENT = gql`
                         block {
                             sys {
                                 id
-                              }
-                              title
-                              description
-                              contentType
-                              fileName
-                              size
-                              url
-                              width
-                              height
+                            }
+                            title
+                            description
+                            contentType
+                            fileName
+                            size
+                            url
+                            width
+                            height
                         }
                     }
                 }
@@ -88,6 +88,15 @@ const GET_HERO_COMPONENT = gql`
     }
 `;
 
-export const getHeroComponent = async ({ id }: { id: string }) => {
-    return apolloFetcher<THeroComponentCollection>(GET_HERO_COMPONENT, { id });
+export const getHeroComponent = async ({
+    id,
+    locale,
+}: {
+    id: string;
+    locale: string;
+}) => {
+    return apolloFetcher<THeroComponentCollection>(GET_HERO_COMPONENT, {
+        id,
+        locale,
+    });
 };

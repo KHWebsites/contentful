@@ -1,6 +1,7 @@
-import { getAsset } from '@/app/lib/contentful/getAsset';
-import { getEntry } from '@/app/lib/contentful/getEntry';
-import { getLandingPageById } from '@/app/lib/contentful/getLandingpage';
+import { useLocale } from 'next-intl';
+import { getAsset } from '../../lib/contentful/getAsset';
+import { getEntry } from '../../lib/contentful/getEntry';
+import { getLandingPageById } from '../../lib/contentful/getLandingpage';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
@@ -15,8 +16,10 @@ export const HyperlinkComponent = async ({
     nodeType,
     children,
 }: _Props) => {
+    const locale = useLocale();
     switch (nodeType) {
         case 'entry-hyperlink':
+            // eslint-disable-next-line no-case-declarations
             const { data: entryData, loading: entryLoading } = await getEntry({
                 id,
             });
@@ -26,8 +29,10 @@ export const HyperlinkComponent = async ({
             }
 
             // ! Assuming that an entry-hyperlink will always be a page
+            // eslint-disable-next-line no-case-declarations
             const { data } = await getLandingPageById({
                 id: entryData.entryCollection.items[0].sys.id,
+                locale,
             });
 
             return (
@@ -36,6 +41,7 @@ export const HyperlinkComponent = async ({
                 </Link>
             );
         case 'asset-hyperlink':
+            // eslint-disable-next-line no-case-declarations
             const { data: assetData, loading: assetLoading } = await getAsset({
                 id,
             });

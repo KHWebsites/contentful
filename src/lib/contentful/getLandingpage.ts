@@ -53,12 +53,15 @@ export type TLandingPage = Readonly<{
 }>;
 
 export const GET_LANDING_PAGE_BY_INTERNALNAME = gql`
-    query ($internalName: String!) {
-        landingPageCollection(where: { internalName: $internalName }) {
+    query ($internalName: String!, $locale: String!) {
+        landingPageCollection(
+            where: { internalName: $internalName }
+            locale: $locale
+        ) {
             items {
                 pageName
                 slug
-                pageContentCollection(limit: 20) {
+                pageContentCollection(limit: 20, locale: $locale) {
                     items {
                         __typename
                         sys {
@@ -81,11 +84,11 @@ export const GET_LANDING_PAGE_BY_INTERNALNAME = gql`
 `;
 
 export const GET_LANDING_PAGE_BY_ID = gql`
-    query ($id: String!) {
-        landingPage(id: $id) {
+    query ($id: String!, $locale: String!) {
+        landingPage(id: $id, locale: $locale) {
             pageName
             slug
-            pageContentCollection(limit: 20) {
+            pageContentCollection(limit: 20, locale: $locale) {
                 items {
                     __typename
                     sys {
@@ -108,15 +111,23 @@ export const GET_LANDING_PAGE_BY_ID = gql`
 
 export const getLandingPageByInternalName = async ({
     internalName,
+    locale,
 }: {
     internalName: string;
+    locale: string;
 }) => {
     return apolloFetcher<TLandingPageCollection>(
         GET_LANDING_PAGE_BY_INTERNALNAME,
-        { internalName }
+        { internalName, locale }
     );
 };
 
-export const getLandingPageById = async ({ id }: { id: string }) => {
-    return apolloFetcher<TLandingPage>(GET_LANDING_PAGE_BY_ID, { id });
+export const getLandingPageById = async ({
+    id,
+    locale,
+}: {
+    id: string;
+    locale: string;
+}) => {
+    return apolloFetcher<TLandingPage>(GET_LANDING_PAGE_BY_ID, { id, locale });
 };

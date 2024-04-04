@@ -10,7 +10,7 @@ import {
     INLINES,
 } from '@contentful/rich-text-types';
 import { Typography } from '../Typography';
-import { ComponentType, ReactNode, useMemo } from 'react';
+import { ComponentType, ReactElement, ReactNode, useMemo } from 'react';
 import { componentMap } from '@/app/mappings';
 import { headers } from 'next/headers';
 import { TComponentProps } from './PageContent';
@@ -49,7 +49,7 @@ type _TProps = {
     };
 };
 
-export const RichTextComponent = ({ richText }: _TProps): JSX.Element => {
+export const RichTextComponent = ({ richText }: _TProps): ReactElement => {
     const document: Document = richText.json;
     const HyperlinkComponent = componentMap.HyperlinkComponent;
 
@@ -68,27 +68,44 @@ export const RichTextComponent = ({ richText }: _TProps): JSX.Element => {
             [INLINES.EMBEDDED_ENTRY]: (_node: RichTextBlock | Inline) => {
                 // ! Can't see a case where we would need a inline embedded entry (Yet)
                 const id = _node.data.target.sys.id;
+                console.log(id);
                 return null;
             },
             [BLOCKS.EMBEDDED_ENTRY]: (_node: RichTextBlock | Inline) => {
-                const id = _node.data.target.sys.id
+                const id = _node.data.target.sys.id;
                 if (id) {
-                    const entry = entryBlocks.find((block: Block) => (block.sys.id === id));
-                    
+                    const entry = entryBlocks.find(
+                        (block: Block) => block.sys.id === id
+                    );
+
                     if (entry) {
-                        const Component: ComponentType<TComponentProps> = componentMap[entry.__typename];
+                        const Component: ComponentType<TComponentProps> =
+                            componentMap[entry.__typename];
                         return <Component id={id} isFirst={false} />;
                     }
                 }
-                return <>{_node.nodeType} {id}</>;
+                return (
+                    <>
+                        {_node.nodeType} {id}
+                    </>
+                );
             },
             [BLOCKS.EMBEDDED_ASSET]: (_node: RichTextBlock | Inline) => {
                 const id = _node.data.target.sys.id;
                 if (id) {
-                    const asset = assetBlocks.find((asset: IAsset) => (asset.sys.id === id));
-                    
+                    const asset = assetBlocks.find(
+                        (asset: IAsset) => asset.sys.id === id
+                    );
+
                     if (asset) {
-                        return <Image src={asset.url} alt={asset.title} width={asset.width} height={asset.height} />;
+                        return (
+                            <Image
+                                src={asset.url}
+                                alt={asset.title}
+                                width={asset.width}
+                                height={asset.height}
+                            />
+                        );
                     }
                 }
             },
@@ -101,6 +118,7 @@ export const RichTextComponent = ({ richText }: _TProps): JSX.Element => {
 
         const paragraphRenderer =
             ({ variant }: TParagraphRendererProps) =>
+            // eslint-disable-next-line react/display-name
             (_node: RichTextBlock | Inline, children: ReactNode) => {
                 return <Typography variant={variant}>{children}</Typography>;
             };
@@ -145,7 +163,10 @@ export const RichTextComponent = ({ richText }: _TProps): JSX.Element => {
         opts.renderNode![BLOCKS.LIST_ITEM] = listItemRenderer;
 
         // TABLE
-        const tableRenderer = (_node: RichTextBlock | Inline, children: ReactNode) => {
+        const tableRenderer = (
+            _node: RichTextBlock | Inline,
+            children: ReactNode
+        ) => {
             return (
                 <div className='overflow-auto'>
                     <table>{children}</table>

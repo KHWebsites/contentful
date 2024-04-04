@@ -1,9 +1,9 @@
-import { useContext, createContext } from 'react';
+import { useContext, createContext, type ReactNode } from 'react';
 import path from 'path';
 
 const i18n = {
     defaultLocale: 'en-US',
-    locales: ['en-US', 'de-DE'],
+    locales: ['en-US', 'nl'],
     localeDetection: false,
     localePath: path.resolve('./public/locales'),
 };
@@ -13,7 +13,7 @@ export interface ContentfulContextInterface {
 }
 
 type ContentfulContextProviderProps = {
-    children: React.ReactNode;
+    children: ReactNode;
 };
 
 export const contentfulContextValue: ContentfulContextInterface = {

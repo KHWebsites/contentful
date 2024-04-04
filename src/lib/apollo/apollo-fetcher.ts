@@ -4,12 +4,14 @@ import {
     OperationVariables,
     QueryOptions,
 } from '@apollo/client';
-import { getClient } from '@/app/lib/apollo/apollo-client';
+import { getClient } from '../../lib/apollo/apollo-client';
 
 const apolloClient = getClient();
 
 type _TApolloFetcher = <T>(
+    // eslint-disable-next-line no-unused-vars
     query: DocumentNode,
+    // eslint-disable-next-line no-unused-vars
     variables?: OperationVariables | undefined
 ) => Promise<ApolloQueryResult<T>>;
 

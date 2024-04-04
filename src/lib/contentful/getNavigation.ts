@@ -13,22 +13,22 @@ export type TNavigationMenuCollection = Readonly<{
                             pageName: string;
                             slug: string;
                         }[];
-                    }
-                }[]
-            }
-        }[]
-    }
+                    };
+                }[];
+            };
+        }[];
+    };
 }>;
 
 export const GET_NAVIGATION_MENU = gql`
-    query {
-        navigationMenuCollection(limit: 1) {
+    query ($locale: String!) {
+        navigationMenuCollection(limit: 1, locale: $locale) {
             items {
-                menuItemsCollection(limit: 5) {
+                menuItemsCollection(limit: 5, locale: $locale) {
                     items {
                         title
                         featured
-                        pagesCollection(limit: 10) {
+                        pagesCollection(limit: 10, locale: $locale) {
                             items {
                                 pageName
                                 slug
@@ -41,6 +41,8 @@ export const GET_NAVIGATION_MENU = gql`
     }
 `;
 
-export const getNavigationMenu = async () => {
-    return apolloFetcher<TNavigationMenuCollection>(GET_NAVIGATION_MENU);
-}
+export const getNavigationMenu = async ({ locale }: { locale: string }) => {
+    return apolloFetcher<TNavigationMenuCollection>(GET_NAVIGATION_MENU, {
+        locale,
+    });
+};

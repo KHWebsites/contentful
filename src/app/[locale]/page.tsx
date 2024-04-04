@@ -1,13 +1,16 @@
 import type { Metadata } from 'next';
-import { getLandingPageByInternalName } from '@/app/lib/contentful/getLandingpage';
+import { getLandingPageByInternalName } from '@/lib/contentful/getLandingpage';
 import { PageContainer } from '@/components/PageContainer';
 import { PageContent } from '@/components/contentful/PageContent';
+import { useLocale } from 'next-intl';
 
 const internalPageName = 'page - Homepage';
 
 export default async function Home() {
+    const locale = useLocale();
     const { data } = await getLandingPageByInternalName({
         internalName: internalPageName,
+        locale,
     });
     const pageContent =
         data.landingPageCollection!.items[0].pageContentCollection.items;
@@ -20,8 +23,11 @@ export default async function Home() {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const locale = useLocale();
     const { data } = await getLandingPageByInternalName({
         internalName: internalPageName,
+        locale,
     });
     const seoMetadata = data.landingPageCollection.items[0].seoMetadata;
 
